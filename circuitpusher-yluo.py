@@ -44,6 +44,8 @@ NOTE by yluo 02/12/17:
 2. refer to the following page for FloodLight APIs.
 https://floodlight.atlassian.net/wiki/display/floodlightcontroller/Floodlight+REST+API
 3. Some of the APIs such as "wm/topology/route" have issues, which caused failure of circuitpusher.py
+4. use this mn command to test: sudo mn
+--controller=remote,ip=127.0.0.1,port=6653 --topo tree,depth=2,fanout=3
 
 """
 
