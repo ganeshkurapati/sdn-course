@@ -16,5 +16,5 @@ SRCS-y := main.c
 include $(RTE_SDK)/mk/rte.extapp.mk
 
 clean:
-sudo rm -rf ./build *~
+	sudo rm -rf ./build *~
 
