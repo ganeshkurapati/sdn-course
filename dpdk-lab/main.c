@@ -279,6 +279,13 @@ int app_thread(void *arg)
 					{//==============================================================================================================
 						printf("The ether_type of the packet is %x \n", ntohs(ethernet->ether_type));//==============================
 					}//==============================================================================================================
+					
+					struct ip *ipv4 = (struct ip*) (packet+sizeof(struct sniff_ethernet));
+					if(ntohs(ethernet->ether_type) == 0x0800)
+					{
+						printf("srcIp- %s",inet_ntoa(ipv4-> ip_src));
+						printf(" & destIp- %s \n",inet_ntoa(ipv4 -> ip_dst));
+					}
 				}
 				
 				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
