@@ -36,6 +36,7 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include <arpa/inet.h>
 
 #define APP_PARAM_NAME_SIZE                      256 //the string size for storing the name
 #define RTE_MAX_ETHPORTS                         32  //the maximum possible ports
