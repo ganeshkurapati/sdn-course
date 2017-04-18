@@ -283,7 +283,8 @@ int app_thread(void *arg)
 					struct ip *ipv4 = (struct ip*) (packet+sizeof(struct sniff_ethernet));
 					if(ntohs(ethernet->ether_type) == 0x0800)
 					{
-						printf("srcIp- %s",inet_ntoa(ipv4-> ip_src));
+						printf("The ether_type of the packet is %x \n", ntohs(ethernet->ether_type));
+						printf("srcIp- %s",inet_ntoa(ipv4 -> ip_src));
 						printf(" & destIp- %s \n",inet_ntoa(ipv4 -> ip_dst));
 					}
 				}
