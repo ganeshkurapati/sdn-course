@@ -217,6 +217,28 @@ struct sniff_ethernet
         u_short ether_type; //  
 };
 //==========================================================================================================
+//http://unix.superglobalmegacorp.com/Net2/newsrc/netinet/ip.h.html
+struct ip {
+#if BYTE_ORDER == LITTLE_ENDIAN 
+	u_char	ip_hl:4,		/* header length */
+		ip_v:4;			/* version */
+#endif
+#if BYTE_ORDER == BIG_ENDIAN 
+	u_char	ip_v:4,			/* version */
+		ip_hl:4;		/* header length */
+#endif
+	u_char	ip_tos;			/* type of service */
+	short	ip_len;			/* total length */
+	u_short	ip_id;			/* identification */
+	short	ip_off;			/* fragment offset field */
+#define	IP_DF 0x4000			/* dont fragment flag */
+#define	IP_MF 0x2000			/* more fragments flag */
+	u_char	ip_ttl;			/* time to live */
+	u_char	ip_p;			/* protocol */
+	u_short	ip_sum;			/* checksum */
+	struct	in_addr ip_src,ip_dst;	/* source and dest address */
+};
+//==========================================================================================================
 int app_thread(void *arg)
 {
 	uint32_t lcore_id = rte_lcore_id();
