@@ -240,7 +240,7 @@ int app_thread(void *arg)
 	int status;
 	struct rte_mbuf *pkts[RTE_PORT_IN_BURST_SIZE_MAX]; //the pointer array that will store the pointer to each received packet
 	uint32_t n_pkts; //the number of received packets during one burst
-	uint16_t *bucket;
+	int *bucket;
 	//
 	if(lcore_id == master_core_id)
 	{
@@ -260,7 +260,7 @@ int app_thread(void *arg)
 				if(unlikely(n_pkts == 0)) {continue;} //if no packet received, then start the next try
 				total_pkts += n_pkts;
 				
-				bucket = rte_malloc(NULL,sizeof(uint16_t),0);
+				bucket = rte_malloc(NULL,sizeof(int),0);
 				
 				//retrieving the data from each packet
 				for(i=0; i<n_pkts; i++)
