@@ -260,7 +260,7 @@ int app_thread(void *arg)
 				total_pkts += n_pkts;
 				
 				unique_ethpkt_no = 0;
-				uint16_t bucket = rte_malloc(NULL,sizeof(uint16_t),0);	
+				uint16_t *bucket = rte_malloc(NULL,sizeof(uint16_t),0);	
 				uint16_t bucket[n_pkts] = {0};
 				
 				//retrieving the data from each packet
