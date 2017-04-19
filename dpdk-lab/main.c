@@ -294,7 +294,8 @@ int app_thread(void *arg)
 				}
 			}
 			//To print number of unique ether types 
-			if(bucket!=null){
+			if(bucket)
+			{
 				int j;
 				for(i=0; i<n_pkts; i++)
 				{
