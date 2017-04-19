@@ -240,7 +240,6 @@ int app_thread(void *arg)
 	int status;
 	struct rte_mbuf *pkts[RTE_PORT_IN_BURST_SIZE_MAX]; //the pointer array that will store the pointer to each received packet
 	uint32_t n_pkts; //the number of received packets during one burst
-	uint16_t bucket[RTE_PORT_IN_BURST_SIZE_MAX];
 	//
 	if(lcore_id == master_core_id)
 	{
@@ -261,7 +260,7 @@ int app_thread(void *arg)
 				total_pkts += n_pkts;
 				
 				unique_ethpkt_no = 0;
-				bucket = {0};
+				uint16_t *bucket = rte_malloc(NULL,sizeof(uint16_t),0);
 				
 				//retrieving the data from each packet
 				for(i=0; i<n_pkts; i++)
@@ -302,6 +301,7 @@ int app_thread(void *arg)
   					}
 				}
 				printf("number of unique ether types: %d",unique_ethpkt_no);
+				rte_free(bucket);
 				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
 				for(i=0; i<n_pkts; i++)
 				{
