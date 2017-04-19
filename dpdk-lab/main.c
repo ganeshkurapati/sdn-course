@@ -240,7 +240,7 @@ int app_thread(void *arg)
 	int status;
 	struct rte_mbuf *pkts[RTE_PORT_IN_BURST_SIZE_MAX]; //the pointer array that will store the pointer to each received packet
 	uint32_t n_pkts; //the number of received packets during one burst
-	uint64_t bucket[100];
+	uint64_t bucket[RTE_PORT_IN_BURST_SIZE_MAX];
 	uint32_t b_index = 0;
 	//
 	if(lcore_id == master_core_id)
