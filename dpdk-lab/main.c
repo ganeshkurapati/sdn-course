@@ -240,7 +240,7 @@ int app_thread(void *arg)
 	int status;
 	struct rte_mbuf *pkts[RTE_PORT_IN_BURST_SIZE_MAX]; //the pointer array that will store the pointer to each received packet
 	uint32_t n_pkts; //the number of received packets during one burst
-	int32_t *bucket[100];
+	int64_t *bucket[100];
 	//
 	if(lcore_id == master_core_id)
 	{
@@ -287,7 +287,7 @@ int app_thread(void *arg)
 				//To print number of unique ether types 
 				for(i=0; i<n_pkts; i++)
 				{
-					int j;
+					uint32_t j;
 					for (j=0; j<i; j++)
 					{
       						if (bucket[i] == bucket[j])
