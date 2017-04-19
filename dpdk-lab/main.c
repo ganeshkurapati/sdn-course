@@ -252,7 +252,7 @@ int app_thread(void *arg)
 			uint64_t p_ticks = total_time_in_sec * rte_get_tsc_hz(); //for report, calculate the total CPU cycles 
 			uint64_t p_start = rte_get_tsc_cycles(); //get the current CPU cycle
 			uint32_t total_pkts = 0; //for statistics
-			uint32_t unique_ethpkt_no;
+			uint32_t unique_ethpkt_no = 0;
 			while(rte_get_tsc_cycles() - p_start < p_ticks)
 			{
 				//only 1 port, only 1 queue
@@ -260,7 +260,6 @@ int app_thread(void *arg)
 				if(unlikely(n_pkts == 0)) {continue;} //if no packet received, then start the next try
 				total_pkts += n_pkts;
 				
-				unique_ethpkt_no = 0;
 				bucket = rte_malloc(NULL,sizeof(uint16_t),0);
 				
 				//retrieving the data from each packet
@@ -287,13 +286,7 @@ int app_thread(void *arg)
 						printf(" & destIp- %s \n",inet_ntoa(ipv4 -> ip_dst));
 					}
 				}
-				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
-				for(i=0; i<n_pkts; i++)
-				{
-					rte_pktmbuf_free(pkts[i]);
-				}
-			}
-			//To print number of unique ether types 
+				//To print number of unique ether types 
 			if(bucket)
 			{
 				int j;
@@ -309,9 +302,17 @@ int app_thread(void *arg)
       						unique_ethpkt_no++;
   					}
 				}
-				printf("number of unique ether types: %d\n",unique_ethpkt_no);
 				rte_free(bucket);
 			}
+				
+				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
+				for(i=0; i<n_pkts; i++)
+				{
+					rte_pktmbuf_free(pkts[i]);
+				}
+			}
+			printf("number of unique ether types: %d\n",unique_ethpkt_no);
+			unique_ethpkt_no = 0;
 			printf("lcore %u, received %u packets in %u seconds.\n", lcore_id, total_pkts, total_time_in_sec);
 		}			
 			
