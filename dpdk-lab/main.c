@@ -218,16 +218,8 @@ struct sniff_ethernet
         u_short ether_type; //  
 };
 //==========================================================================================================
-//http://unix.superglobalmegacorp.com/Net2/newsrc/netinet/ip.h.html
 struct ip {
-#if BYTE_ORDER == LITTLE_ENDIAN 
-	u_char	ip_hl:4,		/* header length */
-		ip_v:4;			/* version */
-#endif
-#if BYTE_ORDER == BIG_ENDIAN 
-	u_char	ip_v:4,			/* version */
-		ip_hl:4;		/* header length */
-#endif
+	u_char	ip_vhl;			/* version *//* header length */
 	u_char	ip_tos;			/* type of service */
 	short	ip_len;			/* total length */
 	u_short	ip_id;			/* identification */
