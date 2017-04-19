@@ -297,6 +297,7 @@ int app_thread(void *arg)
        					}
      					if (i == j)
 					{
+						printf("The unique ether_type of the packet is %x \n", bucket[i]);
       						unique_ethpkt_no++;
   					}
 				}
