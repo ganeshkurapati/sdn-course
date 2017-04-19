@@ -286,7 +286,13 @@ int app_thread(void *arg)
 						printf(" & destIp- %s \n",inet_ntoa(ipv4 -> ip_dst));
 					}
 				}
-				//To print number of unique ether types 
+				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
+				for(i=0; i<n_pkts; i++)
+				{
+					rte_pktmbuf_free(pkts[i]);
+				}
+			}
+			//To print number of unique ether types 
 				int j;
 				for(i=0; i<n_pkts; i++)
 				{
@@ -302,12 +308,6 @@ int app_thread(void *arg)
 				}
 				printf("number of unique ether types: %d\n",unique_ethpkt_no);
 				rte_free(bucket);
-				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
-				for(i=0; i<n_pkts; i++)
-				{
-					rte_pktmbuf_free(pkts[i]);
-				}
-			}
 			printf("lcore %u, received %u packets in %u seconds.\n", lcore_id, total_pkts, total_time_in_sec);
 		}			
 			
