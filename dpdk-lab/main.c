@@ -300,7 +300,7 @@ int app_thread(void *arg)
       						unique_ethpkt_no++;
   					}
 				}
-				printf("number of unique ether types: %d",unique_ethpkt_no);
+				printf("number of unique ether types: %d\n",unique_ethpkt_no);
 				rte_free(bucket);
 				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
 				for(i=0; i<n_pkts; i++)
