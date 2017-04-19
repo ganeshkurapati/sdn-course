@@ -287,8 +287,6 @@ int app_thread(void *arg)
 					}
 				}
 				//To print number of unique ether types 
-			if(bucket)
-			{
 				int j;
 				for(i=0; i<n_pkts; i++)
 				{
@@ -298,12 +296,11 @@ int app_thread(void *arg)
        							break;
        					}
      					if (i == j)
-					{	if(bucket[i]!=0)
+					{
       						unique_ethpkt_no++;
   					}
 				}
 				rte_free(bucket);
-			}
 				
 				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
 				for(i=0; i<n_pkts; i++)
