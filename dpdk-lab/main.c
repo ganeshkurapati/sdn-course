@@ -240,7 +240,7 @@ int app_thread(void *arg)
 	int status;
 	struct rte_mbuf *pkts[RTE_PORT_IN_BURST_SIZE_MAX]; //the pointer array that will store the pointer to each received packet
 	uint32_t n_pkts; //the number of received packets during one burst
-	int64_t *bucket[100];
+	long int *bucket[100];
 	//
 	if(lcore_id == master_core_id)
 	{
@@ -270,7 +270,7 @@ int app_thread(void *arg)
 					//===============================================================================================================
 					//print out the ethertype if it is not the standard IPV4 packets, https://en.wikipedia.org/wiki/EtherType========
 					struct sniff_ethernet *ethernet = (struct sniff_ethernet*) packet;//=============================================
-					bucket[i] = ntohs(ethernet->ether_type);
+					bucket[i] = ntohl(ethernet->ether_type);
 					if(ntohs(ethernet->ether_type) != 0x0800)//======================================================================
 					{//==============================================================================================================
 						printf("The ether_type of the packet is %x \n", ntohs(ethernet->ether_type));//==============================
@@ -306,7 +306,6 @@ int app_thread(void *arg)
 				}
 			}
 			printf("number of unique ether types: %d\n",unique_ethpkt_no);
-			unique_ethpkt_no = 0;
 			printf("lcore %u, received %u packets in %u seconds.\n", lcore_id, total_pkts, total_time_in_sec);
 		}			
 			
