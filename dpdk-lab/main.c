@@ -241,6 +241,7 @@ int app_thread(void *arg)
 	struct rte_mbuf *pkts[RTE_PORT_IN_BURST_SIZE_MAX]; //the pointer array that will store the pointer to each received packet
 	uint32_t n_pkts; //the number of received packets during one burst
 	uint64_t bucket[100];
+	uint32_t b_index = 0;
 	//
 	if(lcore_id == master_core_id)
 	{
@@ -270,7 +271,7 @@ int app_thread(void *arg)
 					//===============================================================================================================
 					//print out the ethertype if it is not the standard IPV4 packets, https://en.wikipedia.org/wiki/EtherType========
 					struct sniff_ethernet *ethernet = (struct sniff_ethernet*) packet;//=============================================
-					bucket[i] = ntohs(ethernet->ether_type);
+					bucket[b_index++] = ntohs(ethernet->ether_type);
 					if(ntohs(ethernet->ether_type) != 0x0800)//======================================================================
 					{//==============================================================================================================
 						printf("The ether_type of the packet is %x \n", ntohs(ethernet->ether_type));//==============================
@@ -284,7 +285,14 @@ int app_thread(void *arg)
 						printf(" & destIp- %s \n",inet_ntoa(ipv4 -> ip_dst));
 					}
 				}
-				//To print number of unique ether types 
+				
+				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
+				for(i=0; i<n_pkts; i++)
+				{
+					rte_pktmbuf_free(pkts[i]);
+				}
+			}
+			//To print number of unique ether types 
 				for(i=0; i<n_pkts; i++)
 				{
 					uint32_t j;
@@ -298,13 +306,7 @@ int app_thread(void *arg)
       						unique_ethpkt_no++;
   					}
 				}
-				
-				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
-				for(i=0; i<n_pkts; i++)
-				{
-					rte_pktmbuf_free(pkts[i]);
-				}
-			}
+			b_index =0;
 			printf("number of unique ether types: %d\n",unique_ethpkt_no);
 			printf("lcore %u, received %u packets in %u seconds.\n", lcore_id, total_pkts, total_time_in_sec);
 		}			
