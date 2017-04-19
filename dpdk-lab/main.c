@@ -251,12 +251,16 @@ int app_thread(void *arg)
 			uint64_t p_ticks = total_time_in_sec * rte_get_tsc_hz(); //for report, calculate the total CPU cycles 
 			uint64_t p_start = rte_get_tsc_cycles(); //get the current CPU cycle
 			uint32_t total_pkts = 0; //for statistics
+			uint32_t unique_ethpkt_no;
 			while(rte_get_tsc_cycles() - p_start < p_ticks)
 			{
 				//only 1 port, only 1 queue
 				n_pkts = rte_eth_rx_burst(0, 0, pkts, RTE_PORT_IN_BURST_SIZE_MAX); //trying to receive packts 
 				if(unlikely(n_pkts == 0)) {continue;} //if no packet received, then start the next try
 				total_pkts += n_pkts;
+				
+				unique_ethpkt_no = 0;
+				uint16_t bucket[n_pkts] = {0};
 				
 				//retrieving the data from each packet
 				for(i=0; i<n_pkts; i++)
@@ -268,6 +272,7 @@ int app_thread(void *arg)
 					//===============================================================================================================
 					//print out the ethertype if it is not the standard IPV4 packets, https://en.wikipedia.org/wiki/EtherType========
 					struct sniff_ethernet *ethernet = (struct sniff_ethernet*) packet;//=============================================
+					uint16_t bucket[i] = ntohs(ethernet->ether_type);
 					if(ntohs(ethernet->ether_type) != 0x0800)//======================================================================
 					{//==============================================================================================================
 						printf("The ether_type of the packet is %x \n", ntohs(ethernet->ether_type));//==============================
@@ -281,7 +286,21 @@ int app_thread(void *arg)
 						printf(" & destIp- %s \n",inet_ntoa(ipv4 -> ip_dst));
 					}
 				}
-				
+				//To print number of unique ether types 
+				int j;
+				for(i=0; i<n_pkts; i++)
+				{
+					for (j=0; j<i; j++)
+					{
+      						if (bucket[i] == bucket[j])
+       							break;
+       					}
+     					if (i == j)
+					{
+      						unique_ethpkt_no++;
+  					}
+				}
+				printf("number of unique ether types: %d",unique_ethpkt_no);
 				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
 				for(i=0; i<n_pkts; i++)
 				{
