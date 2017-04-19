@@ -293,7 +293,7 @@ int app_thread(void *arg)
 				}
 			}
 			//To print number of unique ether types 
-				for(i=0; i<n_pkts; i++)
+				for(i=0; i<100; i++)
 				{
 					uint32_t j;
 					for (j=0; j<i; j++)
