@@ -306,6 +306,7 @@ int app_thread(void *arg)
       						unique_ethpkt_no++;
   					}
 				}
+			bucket = {0};
 			b_index =0;
 			printf("number of unique ether types: %d\n",unique_ethpkt_no);
 			printf("lcore %u, received %u packets in %u seconds.\n", lcore_id, total_pkts, total_time_in_sec);
