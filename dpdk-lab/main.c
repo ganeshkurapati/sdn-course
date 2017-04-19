@@ -260,6 +260,7 @@ int app_thread(void *arg)
 				total_pkts += n_pkts;
 				
 				unique_ethpkt_no = 0;
+				uint16_t bucket = rte_malloc(NULL,sizeof(uint16_t),0);	
 				uint16_t bucket[n_pkts] = {0};
 				
 				//retrieving the data from each packet
@@ -296,11 +297,12 @@ int app_thread(void *arg)
        							break;
        					}
      					if (i == j)
-					{
+					{	if(bucket[i]!=0)
       						unique_ethpkt_no++;
   					}
 				}
 				printf("number of unique ether types: %d",unique_ethpkt_no);
+				rte_free(bucket);
 				//free the packets, this is must-do, otherwise the memory pool will be full, and no more packets can be received
 				for(i=0; i<n_pkts; i++)
 				{
