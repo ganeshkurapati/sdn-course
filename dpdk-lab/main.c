@@ -293,7 +293,7 @@ int app_thread(void *arg)
 				}
 			}
 			//To print number of unique ether types 
-				for(i=0; i<100; i++)
+				for(i=0; i<=b_index; i++)
 				{
 					uint32_t j;
 					for (j=0; j<i; j++)
@@ -302,11 +302,11 @@ int app_thread(void *arg)
        							break;
        					}
      					if (i == j)
-					{
+					{ 
+						if(bucket[i]!=0)
       						unique_ethpkt_no++;
   					}
 				}
-			bucket = {0};
 			b_index =0;
 			printf("number of unique ether types: %d\n",unique_ethpkt_no);
 			printf("lcore %u, received %u packets in %u seconds.\n", lcore_id, total_pkts, total_time_in_sec);
